@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Code Craft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/assets/webicon.png">
+  <meta property="description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:title" content="An example .io game">
+  <meta property="og:description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:image" content="/assets/icon1200.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58664433-3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi-particles/4.3.1/pixi-particles.min.js"></script>
+  <script src="src/client/networking.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-58664433-3');
+  </script>
+  <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+  <script src="src/client/index.js"></script>
+
+</head>
+
+<body>
+
+  <canvas id="game-canvas" class="hidden"></canvas>
+
+  <!-- <button id="gotoLobby">go to Lobby</button>
+  <button id="gotoIngame">go to Ingame</button>
+  <button id="gotoIndex">go to Index</button> -->
+
+  <div id="play-menu">
+    <h1>
+      Code Craft
+      <br />
+    </h1>
+    <hr />
+    <p>
+      그린반 3팀
+    </p>
+    <hr />
+    <!-- <a href="hi.html" class="button">시작</a> -->
+    <button id="play-button">시작</button>
+  </div>
+
+  <div id="disconnect-modal" class="hidden">
+    <div>
+      <h2> 서버 연결 에러! </h2>
+      <hr />
+      <button id="reconnect-button">reconnect</button>
+    </div>
+  </div>
+
+</body>
+
+</html>

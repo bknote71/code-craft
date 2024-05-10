@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Code Craft</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 수정됨 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="@{/assets/webicon.png}">
+    <meta property="description"
+        content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+    <meta property="og:title" content="An example .io game">
+    <meta property="og:description"
+        content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+    <meta property="og:image" content="/assets/icon1200.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@100&display=swap');
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58664433-3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi-particles/4.3.1/pixi-particles.min.js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-58664433-3');
+    </script>
+    <script src="src/client/signup.js"></script>
+    <!-- <script src="../static/src/client/htmlComponent/login.js"></script> -->
+</head>
+
+<body>
+    <canvas id="game-canvas" class="hidden"></canvas>
+    <audio id="audioPlayer" autoplay>
+        <source src="assets/NLP_InGame_Final_Int.mp3" type="audio/mp3">
+    </audio>
+    <div id="full-container">
+
+        <div id="play-menu">
+            <h1>
+                Code Craft
+                <br />
+            </h1>
+        </div>
+
+        <div class="wrapper">
+            <div class="form-box-login">
+                <h2>Login</h2>
+                <form th:action="@{/login}" method="POST">
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="id-card-outline"></ion-icon></span>
+                        <input type="text" name="username" required>
+                        <label>ID</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                        <input type="password" name="password" required>
+                        <label>Password</label>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="login-register">
+                        <p>Don't have an account?<a href="#" class="register-link" style="color: #4A90E2;"> Register</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box-registration">
+                <h2>Registration</h2>
+                <form th:action="@{/signup}" method="POST">
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="person"></ion-icon></span>
+                        <input type="text" name="username" required>
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                        <input type="password" name="password" required>
+                        <label>Password</label>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                    <div class="login-register">
+                        <p>Already have an account?<a href="#" class="login-link" style="color: #4A90E2;"> Login</a></p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ionicons 스크립트 추가 -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

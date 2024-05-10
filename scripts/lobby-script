@@ -1,0 +1,85 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var robotInfos = /*[[${robotInfos}]]*/ [];
+    var codeOfFirstRobot = 'defaultCode'; // 기본 코드 설정
+    let selectedDeckLobby = 0;
+    let editorLobby;
+  
+    if (robotInfos.length > 0) {
+        codeOfFirstRobot = robotInfos[0].code; // 0번 인덱스의 코드로 설정
+    }
+  
+    require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' } });
+    require(["vs/editor/editor.main"], function () {
+      editorLobby = monaco.editor.create(document.getElementById('container-lobby-body'), {
+        value: codeOfFirstRobot,
+        language: 'java',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        fontSize: 20,
+        minimap: {
+            
+            enabled: false,
+        },
+        wordWrap: "on"
+      });
+    });
+  
+  
+    function getEditorValue() {
+        if (editorLobby) {
+            const content = editorLobby.getValue();// Display the content, you can do whatever you want with it
+            return content;
+        }
+    }
+    function code_check_lobby(result, status,index, code) {
+        const terminal = document.getElementById('terminal-lobby');
+        if (result != 0) {
+          
+            const firstError = status.split('\n')[0];
+            const translatedError = translateErrorToKorean(firstError);
+            console.log(firstError)
+            terminal.innerHTML = `<span class="terminal-error">${translatedError}: ${result}</span>`;
+                
+        } else {
+            terminal.innerHTML = `<span class="terminal-success">컴파일 성공!</span>`;
+            robotInfos[index] = code;
+        }
+    }
+  
+  
+      function selectDeckIndexLobby(deckId) {
+          selectedDeckLobby = deckId;
+          console.log(robotInfos)
+          if (robotInfos[selectedDeckLobby]) {
+              editorLobby.setValue(robotInfos[selectedDeckLobby].code)
+              console.log(selectedDeckLobby);
+          } else {
+              console.log('No robot info found for selected deck.')
+          }
+      }
+  
+      function run_code() {
+          compile_code(selectedDeckLobby, getEditorValue());
+      }
+
+      function translateErrorToKorean(status) {
+            // 간단한 예제로 에러 메시지를 한국어로 번역하는 함수
+            // 필요한 만큼 메시지를 추가하거나 수정할 수 있습니다.
+            // const errorTranslations = {
+            //     "reached end of file while parsing" : `컴파일 오류: !`,
+            //     "cannot find symbol" : `메서드나 속성을 찾을 수 없습니다: !`
+            // };
+            // if (errorTranslations.hasOwnProperty(status)) {
+            //     return errorTranslations[status] + status;
+            // } else {
+                return "컴파일 에러:" + status;
+            // }
+        }
+
+    function enter_ingame() {
+        let specIndex = (selectedDeckLobby + 1);
+        window.location.href='/ingame?specIndex=' + specIndex;
+      }
+      /*]]>*/
+  </script>

@@ -1,0 +1,249 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+var specIndex = [[${specIndex}]];
+var robotInfos = /*[[${robotInfos}]]*/ [];
+    while (robotInfos.length < 4) { // 배열의 길이가 4가 되도록 함
+        robotInfos.push({
+            code: "public class StupidBot extends Robot {\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public void run() {\n" +
+                "        while (true) {\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public void onScannedRobot(ScannedRobotEvent event) {\n" +
+                "    }\n" +
+                "}\n"  // 여기에 더미 데이터 형식을 추가
+        });
+}
+var codeOfFirstRobot = 'defaultCode'; // 기본 코드 설정
+if (robotInfos.length > 0) {
+  codeOfFirstRobot = robotInfos[specIndex].code; // 0번 인덱스의 코드로 설정
+}
+
+let selectedDeck = specIndex;
+let editor;
+
+require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' } });
+require(["vs/editor/editor.main"], function () {
+
+    monaco.editor.defineTheme('myTheme', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [{ background: '20202080' }],
+        colors: {
+            'editor.background': '#20202080',
+        }
+    });
+
+    editor = monaco.editor.create(document.getElementById('container-body'), {
+      value: codeOfFirstRobot,
+      language: 'java',
+      theme: 'myTheme',
+      automaticLayout: true,
+      fontSize: 20,
+      minimap: {
+        enabled: false,
+    },
+        wordWrap: "on"
+    });
+
+    // Create a function to increase font size
+    window.increaseFontSize = function() {
+        var currentFontSize = editor.getOption(monaco.editor.EditorOption.fontSize);
+        editor.updateOptions({ fontSize: currentFontSize + 1 });
+    }
+
+    // Create a function to decrease font size
+    window.decreaseFontSize = function() {
+        var currentFontSize = editor.getOption(monaco.editor.EditorOption.fontSize);
+        if (currentFontSize > 1) { // Keep the minimum size at 1 to prevent disappearing text
+            editor.updateOptions({ fontSize: currentFontSize - 1 });
+        }
+    }
+    updateEditorBasedOnLanguageSelection();
+
+});
+
+
+/*]]>*/
+
+// play battle
+// playBattle(specIndex);
+
+function getEditorValue() {
+    if (editor) {
+        const content = editor.getValue();// Display the content, you can do whatever you want with it
+        return content;
+    }
+}
+
+function code_check(result, status, index, code, lang) {
+    const terminal = document.getElementById('terminal');
+    
+    if (result != 0) {
+        console.log("status?????:" , status);
+        const firstError = status.split('\n')[0];
+        const translatedError = translateErrorToKorean(firstError);
+        console.log(firstError)
+        terminal.innerHTML = `<span class="terminal-error">${translatedError}: ${result}</span>`;
+        
+    } else {
+        terminal.innerHTML = `<span class="terminal-success">컴파일 성공!</span>`;
+        robotInfos[index].code = code;
+        robotInfos[index].lang = lang;
+        setTimeout(() => {
+            terminal.innerHTML = '';
+        }, 10000);
+    }
+}
+
+function selectDeckIndex(deckId) {
+    robotInfos[selectedDeck].code = getEditorValue();
+    selectedDeck = deckId;
+    if(robotInfos[selectedDeck]){
+        var language = robotInfos[selectedDeck].lang;
+        editor.setValue(robotInfos[selectedDeck].code)
+        console.log(selectedDeck);
+        switch(selectedDeck){
+            case 0:
+                document.getElementById('deck-one').classList.add('active');
+                document.getElementById('deck-two').classList.remove('active');
+                document.getElementById('deck-thress').classList.remove('active');
+                break;
+            case 1:
+                document.getElementById('deck-one').classList.remove('active');
+                document.getElementById('deck-two').classList.add('active');
+                document.getElementById('deck-thress').classList.remove('active');
+                break;
+            case 2:
+                document.getElementById('deck-one').classList.remove('active');
+                document.getElementById('deck-two').classList.remove('active');
+                document.getElementById('deck-thress').classList.add('active');
+                break;
+        }
+        document.getElementById('language-select').value = language;
+    } else {
+        console.log('No robot info found for selected deck.')
+    }
+}
+
+function run_code() {
+    let selectedLanguage =  document.getElementById('language-select').value;
+    console.log(selectedLanguage);
+    change_code(selectedDeck, getEditorValue(), selectedLanguage);
+    robotInfos[selectedDeck].lang = selectedLanguage;
+}
+
+
+function translateErrorToKorean(status) {
+            // 간단한 예제로 에러 메시지를 한국어로 번역하는 함수
+            // 필요한 만큼 메시지를 추가하거나 수정할 수 있습니다.
+            // const errorTranslations = {
+            //     "reached end of file while parsing" : `컴파일 오류: !`,
+            //     "cannot find sym   bol" : `메서드나 속성을 찾을 수 없습니다: !`
+            // };
+            // if (errorTranslations.hasOwnProperty(status)) {
+            //     return errorTranslations[status] + status;
+            // } else {
+    return "컴파일 에러:" + status;
+}
+
+function updateEditorBasedOnLanguageSelection() {
+    const languageSelectElement = document.getElementById('language-select');
+
+    languageSelectElement.addEventListener('change', function (e) {
+        const language = e.target.value;
+    let code = '';
+
+    switch (language) {
+            case 'java':
+    code = `public class FireBot extends Robot {
+        @Override
+        public void run() {
+  
+    }
+
+    @Override
+    public void onHitByBullet(HitByBulletEvent hitByBulletEvent){
+
+    }
+
+    @Override
+    public void onScannedRobot(ScannedRobotEvent event) {
+
+    }
+
+    @Override
+    public void onBulletHit(BulletHitEvent bulletHitEvent) {
+
+    }
+
+}`;
+    break;
+    case 'javascript':
+    code = `class FireBot {
+        run() {
+
+    }
+
+    onHitByBullet(hitByBulletEvent) {
+
+    }
+
+    onScannedRobot(event) {
+
+    }
+
+    onBulletHit(bulletHitEvent) {
+
+    }
+}`;
+    break;
+    case 'python':
+    code = `class FireBot:
+    def run(self):
+        pass
+
+    def on_hit_by_bullet(self, hit_by_bullet_event):
+        pass
+
+    def on_scanned_robot(self, event):
+        pass
+
+    def on_bullet_hit(self, bullet_hit_event):
+        pass`;
+    break;
+    case 'cpp':
+    code = `class FireBot {
+        public:
+    void run() {
+
+    }
+
+    void onHitByBullet(HitByBulletEvent hitByBulletEvent) {
+
+    }
+
+    void onScannedRobot(ScannedRobotEvent event) {
+
+    }
+
+    void onBulletHit(BulletHitEvent bulletHitEvent) {
+
+    }
+};`;
+    break;
+        }
+
+    editor.setValue(code);
+    });
+}
+function exit_ingame() {
+        window.location.href='/lobby';
+}
+
+
+</script>

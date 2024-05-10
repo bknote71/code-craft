@@ -1,0 +1,250 @@
+@font-face{
+    font-family:'DNFForgedBlade';
+    font-style:normal;
+    font-weight:500;
+    src:url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Bold.otf') format('opentype');
+}
+
+#full-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertical centering */
+    background-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    /* background-color: black; */
+}
+
+.hidden {
+    display: none !important;
+}
+
+#game-canvas {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    border: 2px solid gray;
+}
+
+#play-menu {
+    /* flex: 5; */
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    padding: 20px;
+    text-align: center;
+    /* background: rgba(0, 0, 0, 0.7); */
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+@keyframes neonFlicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        text-shadow: 
+        0 0 5px rgba(123, 173, 230, 0.5), 
+        0 0 10px rgba(123, 173, 230, 0.5),
+        0 0 15px rgba(123, 173, 230, 0.5), 
+        0 0 20px rgba(123, 173, 230, 0.5), 
+        0 0 30px rgba(123, 173, 230, 0.5);
+    }
+    20%, 24%, 55% { 
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+#play-menu h1 {
+    font-family: 'Roboto Mono', monospace;
+    margin-top: 0;
+    color: rgba(123, 173, 230, 1);
+    font-size: 6rem;
+    text-shadow: 
+    0 0 5px rgba(123, 173, 230, 0.3), 
+    0 0 10px rgba(123, 173, 230, 0.3),
+    0 0 15px rgba(123, 173, 230, 0.3), 
+    0 0 20px rgba(123, 173, 230, 0.3), 
+    0 0 30px rgba(123, 173, 230, 0.3);
+    animation: neonFlicker 1.5s infinite alternate;
+}
+
+.wrapper {
+    position: absolute;
+    /* flex: 5; */
+    top: 50%;
+    right: 10%;
+    width: 450px;
+    height: 550px;
+    background: transparent;
+    /* border: 1px solid rgba(60, 60, 60, 0.5); */
+    backdrop-filter: blur(1px);
+    background-color: rgba(123, 173, 230, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: height .5s ease;
+    margin: auto;
+    transform: translate(-50%, -50%);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.wrapper.active {
+    height: 650px;
+}
+
+.wrapper .form-box {
+    width: 100%;
+    padding: 0;
+}
+
+.wrapper h2 {
+    color: #f0f0f0;
+}
+
+.wrapper .form-box-login {
+    transition: transform .5s ease;
+    transform: translateX(0);
+}
+
+.wrapper.active .form-box-login {
+    transition: none;
+    transform: translateX(-400px);
+}
+
+.wrapper .form-box-registration {
+    position: absolute;
+    transition: none;
+    transform: translateX(400px);
+}
+
+.wrapper.active .form-box-registration {
+    transition: transform .5s ease;
+    transform: translateX(0);
+}
+
+.form-box h2 {
+    font-size: 2em;
+    color: #f0f0f0;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #f0f0f0;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, #7BADe6, #4A90E2);
+    -webkit-background-clip: text;
+    /* backdrop-filter: blur(1px); */
+    background-color: rgba(123, 173, 230, 0.2);
+    color: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #f0f0f0;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+
+.input-box input:focus+label,
+.input-box input:valid+label {
+    top: -5px
+}
+
+
+.input-box .icon {
+    position: absolute;
+    right: 8px;
+    font-size: 1.2m;
+    color: #f0f0f0;
+    line-height: 57px;
+}
+
+.remember-forgot {
+    font-size: .9em;
+    color: #f0f0f0;
+    font-weight: 500;
+    margin: -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-forgot label input {
+    accent-color: #f0f0f0;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #f0f0f0;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(45deg, #7BADe6, #4A90E2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.btn:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.login-register {
+    font-size: .9em;
+    color: #f0f0f0;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
+.login-register p a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-register p a:hover {
+    text-decoration: underline;
+}

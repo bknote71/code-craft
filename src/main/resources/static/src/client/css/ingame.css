@@ -1,0 +1,922 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background-color: black;
+  font-family: 'Roboto Mono', monospace;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+  width: 100%;
+}
+
+button {
+  font-size: 18px;
+  outline: none;
+  border: none;
+  color: black;
+  background-color: transparent;
+  padding: 5px 20px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: rgb(230, 230, 230);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* #game-canvas {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  border: 2px solid gray;
+} */
+
+#leaderboard {
+  z-index: 10;
+  position: fixed;
+  top: -50%;
+  left: 11.5%;
+  width: 20%;
+  /* 더 넓게 조정 */
+  height: 40%;
+  /* 더 높게 조정 */
+  padding: 20px;
+  /* 패딩 증가로 좀 더 안정적인 느낌을 줌 */
+  background-color: rgba(10, 20, 40, 0.8);
+  /* 깊은 우주색 */
+  color: #E0E0E0;
+  /* 별빛처럼 반짝이는 글자색 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s;
+  box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.2);
+  /* 별빛과 같은 그림자 효과 */
+  border-radius: 2px;
+  /* 모서리 둥글게 */
+  /* border: 3px solid #9f6ee7; */
+  /* 로비 CSS 스타일의 테두리 적용 */
+}
+
+#leaderboard.open {
+
+  top: 5%;
+
+}
+
+#leaderboard.hidden-to-left {
+  left: -50%;
+}
+
+#leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+  /* 글자 크기 증가 */
+}
+
+#leaderboard th,
+#leaderboard td {
+  padding: 15px;
+  /* 패딩 증가 */
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#leaderboard th {
+  font-size: 20px;
+  /* 제목의 글자 크기 증가 */
+  color: #FFD700;
+  /* 제목을 골드 컬러로 강조 */
+}
+
+#leaderboard tr:last-child td {
+  border-bottom: none;
+}
+
+#disconnect-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+#disconnect-modal>div {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  padding: 15px 20px;
+  background-color: white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+@media screen and (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  #play-menu {
+    padding: 10px 15px;
+    min-width: 280px;
+  }
+
+  #disconnect-modal>div {
+    padding: 10px;
+    min-width: 280px;
+  }
+
+  #leaderboard th {
+    padding: 0 3px;
+  }
+
+  #leaderboard td {
+    padding: 0 3px;
+  }
+
+  #leaderboard table {
+    font-size: 14px;
+  }
+}
+
+/*------------------------------------*/
+
+#deck{
+  z-index: 10;
+  position: absolute; 
+  top: 1%; 
+  left: 4%;
+  width: 100%;
+  height: 0%;
+}
+
+#container {
+  position: absolute;
+  top: 6%;
+  /* right: 3%;
+  width: 40%; */
+  left: 3%;
+  width: 94%;
+  height: 80%;
+  overflow: hidden; 
+  /* transform: translateY(-50%); */
+  cursor: inherit;
+}
+
+#container-body {
+  /* z-index: 12; */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: inherit;
+}
+/* button[th:onclick="increaseFontSize()"] {
+  right: 50px;
+  bottom: 10px;
+}
+
+button[th:onclick="decreaseFontSize()"] {
+  right: 10px;
+  bottom: 10px;
+} */
+.control-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  /* Set the color of the text to white */
+  font-size: 20px;
+  /* Set the size of the text */
+  margin: 0 5px;
+  /* Add some space around the buttons */
+  cursor: pointer;
+  /* Change the cursor when hovering over the button */
+}
+#inputbar {
+  z-index: 10;
+  position: fixed;
+  bottom: 5%;
+  left: 11.5%;
+  width: 500px;
+  margin: auto;
+  background-color: rgba(123, 173, 230, 0.2);
+  color: white;
+  padding: 10px;
+  z-index: 10;
+  border: none;
+  outline: none;
+  transition: 0.5s;
+}
+
+#inputbar:focus {
+  background-color: rgba(123, 173, 230, 0.6);
+}
+
+#inputbar.hidden-to-left{
+
+  left: -50%;
+
+}
+
+#inputbar::placeholder {
+  color: white;
+  opacity: 0.5; /* Lower opacity to ensure the placeholder text is less prominent than user input */
+}
+
+#terminal-box {
+  position: absolute;
+  /* top: 87%; */
+  bottom: 3%;
+  /* right: 3%; */
+  /* width: 40%; */
+  left: 3%;
+  right: 3%;
+  width: 94%;
+  height: 10%;
+  /* 수정된 높이 */
+  display: flex;
+  overflow: hidden;
+  /* transform: translateY(-50%); */
+  /* terminal이 아래쪽에 있으므로, positive 값을 사용해야 합니다. */
+  /* border: 1px solid hsl(186 100% 69%); */
+  cursor: inherit;
+}
+
+#terminal {
+  left: 0%;
+  width: 75%;
+  overflow: auto;
+  background-color: rgba(123, 173, 230, 0.2);
+  padding: 15px 0 0 20px;
+}
+
+#compile-button {
+  right: 0%;
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(45deg, #D66363, #D23838);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+#compile-button:hover {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.terminal-error {
+  font-size: 20px;  
+  font-weight: bold;
+  color: rgb(248, 30, 30);
+}
+
+/* 성공 메시지 */
+.terminal-success {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(13, 218, 13);
+}
+#terminal::-webkit-scrollbar {
+  width: 8px;
+  /* Scrollbar width */
+}
+
+#terminal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  /* Scrollbar track color */
+}
+
+#terminal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  /* Scrollbar thumb color */
+  border-radius: 4px;
+}
+
+#terminal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
+  /* Hover color */
+}
+
+#deck-one, #deck-two, #deck-thress {
+  position: absolute;
+  top: 0%;
+  padding: 10px 20px;
+  width: 15%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: rgba(123, 173, 230, 0.7);  /* half-transparent grey */
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+
+#deck-one {
+  left: 0%;
+}
+
+#deck-one.active{
+  background-color: rgb(2, 120, 255);
+}
+
+#deck-two {
+  left: 16%; /* Adjust as necessary */
+}
+
+#deck-two.active{
+  background-color: rgb(2, 120, 255);
+}
+
+#deck-thress {
+  left: 32%; /* Adjust as necessary */
+}
+
+#deck-thress.active{
+  background-color: rgb(2, 120, 255);
+}
+
+#button-container {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 (필요한 경우) */
+  justify-content: flex-end;
+}
+
+#plus-button, #minus-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  width: 3%;
+  border: none;
+  background-color: rgba(180, 73, 73, 0.8);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 2px;
+}
+
+#plus-button {
+
+  margin-right: 1.5%;
+
+}
+
+#minus-button{
+  margin-right: 0.5%;
+}
+
+#plus-button:hover, #minus-button:hover {
+  background-color: rgba(180, 73, 73, 1);  /* 호버(마우스 오버)시의 색 변경 */
+}
+
+#language-select {
+  position: absolute;
+  top: 0%;
+  right: 7.5%;
+  /* Puts the dropdown to the extreme right */
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  /* Color for the text inside the dropdown */
+  background-color: rgba(123, 173, 230, 0.7);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+#deck-one:hover, #deck-two:hover, #deck-thress:hover {
+
+  background-color: rgba(123, 173, 230, 0.9);
+}
+
+#deck-one:active, #deck-two:active, #deck-thress:active {
+  background-color: rgba(123, 173, 230, 1);
+}
+
+@media only screen and (max-width: 600px) {
+  #deck-one, #deck-two, #deck-thress {
+    font-size: 1em;
+    padding: 5px 10px;
+  }
+}
+
+/* -------------------------------------------------------- */
+
+#main-container {
+  z-index: 10;
+  position: fixed;
+  right: -40%; /* Initially hide the container off-screen to the right */
+  top: 0;
+  width: 40%; /* Container takes 50% of the full width */
+  height: 100%; /* Container takes the full height */
+  background-color: rgba(123, 173, 230, 0.2); /* Change to your preferred color */
+  overflow-x: hidden;
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#main-container.open {
+  right: 0; /* When the container is opened, it aligns to the right edge */
+}
+
+#toggle-main-container {
+  z-index: 10;
+  border-radius: 10px 0 0 10px;
+  position: fixed;
+  width: 10%;
+  height: 10%;
+  top: 5%;
+  right: 0%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#toggle-main-container.open {
+  right: 40%; /* When the container is opened, the button moves to the left */
+}
+
+#toggle-event {
+  z-index: 10;
+  border-radius: 0 10px 10px 0;
+  position: fixed;
+  width: 5%;
+  height: 8%;
+  top: 5%;
+  left: 0%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#toggle-event.hidden-to-left {
+  left: -30%; /* When the container is opened, the button moves to the left */
+}
+
+#toggle-event.open {
+  left: 25%; /* When the container is opened, the button moves to the left */
+  z-index: 11;
+}
+
+#toggle-module {
+  z-index: 10;
+  border-radius: 0 10px 10px 0;
+  position: fixed;
+  width: 5%;
+  height: 8%;
+  top: 16%;
+  left: 0%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#toggle-module.hidden-to-left {
+  left: -30%; /* When the container is opened, the button moves to the left */
+}
+
+#toggle-module.open {
+  left: 25%; /* When the container is opened, the button moves to the left */
+  z-index: 11;
+}
+
+#toggle-help {
+  z-index: 10;
+  border-radius: 0 10px 10px 0;
+  position: fixed;
+  width: 5%;
+  height: 8%;
+  bottom: 16%;
+  left: 0%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#toggle-help.hidden-to-left {
+  left: -30%; /* When the container is opened, the button moves to the left */
+}
+
+#toggle-help.open {
+  left: 25%; /* When the container is opened, the button moves to the left */
+  z-index: 11;
+}
+
+#toggle-leaderboard {
+  z-index: 10;
+  border-radius: 0 0 10px 10px;
+  position: fixed;
+  width: 10%;
+  height: 5%;
+  left: 50%;
+  top: 0%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+  transform: translateX(-50%);
+}
+
+#toggle-leaderboard.open {
+  top: -20%; /* When the container is opened, the button moves to the left */
+}
+
+#exit-button {
+  z-index: 10;
+  border-radius: 15px 15px 15px 15px;
+  position: fixed;
+  color : red;
+  width: 8%;
+  height: 8%;
+  right: 2%;
+  bottom: 5%; /* Initially hide half of the button off-screen to the right */
+  transition: 0.5s;
+  backdrop-filter: blur(5px);
+}
+
+#exit-button.open {
+  right: -20%; /* When the container is opened, the button moves to the left */
+}
+/* -------------------------------------------------------- */
+
+.event-sidebar {
+  position: fixed;
+  left: -25%;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  background-color: rgba(123, 173, 230, 0.2);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding: 15px 15px;
+  color: #fff;
+  backdrop-filter: blur(5px);
+  font-size: 20px;
+}
+
+.event-sidebar.open {
+  left: 0%;
+  z-index: 11;
+}
+
+.help-sidebar {
+  position: fixed;
+  left: -25%; /* Sidebar width */
+  top: 0;
+  width: 25%; /* Sidebar width */
+  height: 100%;
+  background-color: rgba(123, 173, 230, 0.2);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding: 10px;
+  color: #fff;
+  backdrop-filter: blur(5px);
+  font-size: 20px;
+}
+
+.help-sidebar.open {
+  left: 0%;
+  z-index: 11;
+}
+
+.help-sidebar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.help-sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent; 
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent; 
+}
+
+/* Firefox */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.sidebar {
+  position: fixed;
+  left: -25%; /* Sidebar width */
+  top: 0;
+  width: 25%; /* Sidebar width */
+  height: 100%;
+  background-color: rgba(123, 173, 230, 0.2);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding: 10px;
+  color: #fff;
+  backdrop-filter: blur(5px);
+  font-size: 20px;
+}
+
+.sidebar.open {
+  left: 0%;
+  z-index: 11;
+}
+
+.sidebar h2 {
+
+  z-index: 11;
+  text-align: center;
+}
+
+.sidebar table {
+  top: 15%;
+  width: 90%;
+  border-radius: 1px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-collapse: collapse;
+  margin: 20px auto; /* 테이블을 가운데에 정렬하기 위해 */
+}
+
+.sidebar table, .sidebar th, .sidebar td {
+  border: 1px solid #7BADE6;
+  padding: 8px 12px;
+  text-align: center; /* 모든 셀을 가운데에 정렬 */
+}
+
+.sidebar th {
+  background-color: rgba(123, 173, 230, 0.5);
+  color: white;
+}
+
+.sidebar tr:nth-child(even) {
+  background-color: rgba(123, 173, 230, 0.3);
+}
+
+/* 반응형 스타일 */
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+      width: 100%;
+      left: -100%;
+  }
+
+  .sidebar.open {
+      left: 0;
+  }
+
+  .sidebar h2 {
+      font-size: 1.5em; /* 헤더의 글자 크기를 줄임 */
+  }
+
+  .sidebar table {
+      width: 100%;
+  }
+
+  .sidebar th, .sidebar td {
+      padding: 5px 8px; /* 패딩 줄임 */
+  }
+}
+
+/* -------------------------------------------------------- */
+
+.space-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* This ensures the image maintains its aspect ratio */
+}
+
+.space-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: rgba(123, 173, 230, 0.2);
+  border: none;
+  transition: all 0.3s;
+}
+
+.space-button:hover {
+  background-color: rgba(123, 173, 230, 0.6);
+}
+
+.space-button:active {
+  background-color: rgba(123, 173, 230, 0.9);
+  transform: translateY(4px);
+}
+
+#compile-sidebar {
+  z-index: 10;
+  position: fixed;
+  right: -100%; /* Initially hide the container off-screen to the right */
+  top: 0;
+  width: 100%; /* Container takes the full width */
+  height: 100%; /* Container takes the full height */
+  background-color: rgba(123, 173, 230, 0.1);
+  overflow-x: hidden;
+  transition: 0.5s;
+  backdrop-filter: blur(10px);
+  display: flex;           /* Flexbox를 사용 */
+  justify-content: center; /* 중앙 정렬 (가로축) */
+  align-items: center;     /* 중앙 정렬 (세로축) */
+}
+
+#compile-sidebar.open {
+  right: 0; /* When the container is opened, it aligns to the right edge */
+}
+
+#loading-button {
+    display: flex;
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+      border-top: 16px solid #3498db;
+  }
+
+  33% {
+      border-top: 16px solid #e74c3c; /* 색 변경 */
+  }
+
+  66% {
+      border-top: 16px solid #f1c40f; /* 색 변경 */
+  }
+
+  100% {
+      transform: rotate(360deg);
+      border-top: 16px solid #3498db;
+  }
+}
+#audio-box {
+  position: fixed;
+  width: 10%;
+  height: 10%;
+  bottom: 3%;
+  left: 0%;
+  z-index: 10;
+  background-color: transparent;
+  /* Change here */
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px;
+  transition: 0.5s;
+}
+
+#audio-box.hidden-to-left {
+  left: -30%;
+}
+
+
+#muteUnmuteBtn {
+  color: #fff;
+  width: 80%;
+  transition: 0.5s;
+  background: rgba(123, 173, 230, 0.2);
+  border-radius: 1px;
+  margin-bottom: 10%;
+  transform: 0.5s;
+}
+
+#muteUnmuteBtn:hover {
+  background: rgba(123, 173, 230, 0.3);;
+}
+
+#muteUnmuteIcon {
+  height: 50px;
+  width: 50px;
+}
+
+#volumeControl {
+  width: 80%;
+  bottom: 10%;
+}
+
+.event-box{
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(123, 173, 230, 0.2);
+  border: 1px solid rgba(123, 173, 230, 0.5); /* 각 박스를 구분하기 위한 테두리 추가 */
+  border-radius: 1px; 
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 박스에 그림자 효과를 추가하여 독립적으로 보이게 함 */
+}
+
+.event-box strong {
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5); /* strong과 p 사이에 구분선 추가 */
+  margin-bottom: 10px; 
+  padding-bottom: 10px; 
+}
+
+.event-box table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+.event-box table td {
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* -------------------------------------------------------- */
+
+.module-box{
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(123, 173, 230, 0.2);
+  border: 1px solid rgba(123, 173, 230, 0.5); /* 각 박스를 구분하기 위한 테두리 추가 */
+  border-radius: 1px; 
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 박스에 그림자 효과를 추가하여 독립적으로 보이게 함 */
+}
+
+.module-box strong {
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5); /* strong과 p 사이에 구분선 추가 */
+  margin-bottom: 10px; 
+  padding-bottom: 10px; 
+}
+
+.module-box table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+.module-box table td {
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* -------------------------------------------------------- */
+
+#coding-result {
+  background-color: white;
+  width: 10%;
+  height: 10%;
+  right: -20%;
+  bottom: 10%;
+}
+
+#coding-result.open{
+  right: 0%;
+}
+
+/* 진행 중 상태 */
+#coding-result.processing {
+  display: block;
+  content: "a";
+}
+
+/* 성공 상태 */
+#coding-result.success {
+  display: block;
+  content: "b";
+  color: green; /* 성공을 나타내기 위한 색상 선택 */
+}
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 64 64">
+ <defs id="defs4">
+  <filter id="filter4138" style="color-interpolation-filters:sRGB" height="1.238" width="1.2421" y="-.11898" x="-.12103">
+   <feGaussianBlur id="feGaussianBlur4140" stdDeviation="2.925003"/>
+  </filter>
+ </defs>
+ <g id="layer1" transform="translate(0 -988.36)">
+  <g id="g4142" stroke-linejoin="round" transform="matrix(.95 0 0 .95 1.6 50.993)" stroke="#fff">
+    <!-- Main body of spaceship -->
+   <path d="M32 998 L64 1040 L32 1055 L0 1040 Z" fill="#fff" />
+   <!-- Top part of spaceship to give more detail -->
+   <path d="M32 998 L32 1022 L18 1032 L32 1035 L46 1032 Z" fill="#ddd" />
+   <!-- Wings or side boosters of spaceship -->
+   <path d="M32 1035 L10 1040 L5 1042.5 L10 1045 L32 1048 Z" fill="#bbb" />
+   <path d="M32 1035 L54 1040 L59 1042.5 L54 1045 L32 1048 Z" fill="#bbb" />
+    <!-- Outline to give more depth -->
+   <path d="M32 998 L64 1040 L32 1055 L0 1040 Z M32 998 L32 1035 L10 1040 L5 1042.5 L10 1045 L32 1048 L54 1045 L59 1042.5 L54 1040 L32 1035 Z" filter="url(#filter4138)" stroke-width="2" fill="none"/>
+  </g>
+ </g>
+</svg>

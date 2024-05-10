@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Code Craft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/assets/webicon.png">
+  <meta property="description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:title" content="An example .io game">
+  <meta property="og:description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:image" content="/assets/icon1200.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@100&display=swap');
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58664433-3"></script>
+  <script src="src/client/backgroundMusic.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi-particles/4.3.1/pixi-particles.min.js"></script>
+  <script src="src/client/networking.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-58664433-3');
+  </script>
+  <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+
+  <script src="src/client/lobby.js"></script>
+
+</head>
+
+<body>
+
+  <canvas id="game-canvas" class="hidden"></canvas>
+
+  <div id="play-menu">
+    <h1>
+        Code Craft
+        <br />
+    </h1>
+  </div>
+
+  <div id="audio-box">
+    <audio id="audioPlayer" autoplay loop>
+      <source src="assets/NLP_InGame_Final_Int.mp3" type="audio/mp3">
+    </audio>
+    <button id="muteUnmuteBtn">
+      <img id="muteUnmuteIcon" src="assets/volume.png"> <!-- Volume icon -->
+    </button>
+    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
+  <div id="rank-box">
+    <div id="today-rank">Today Ranking!</div>
+  </div>
+
+  <button id="start-button" class='glowing-btn' th:onclick="enter_ingame()">STAR<span>T</span></button>
+
+
+</body>
+
+</html>

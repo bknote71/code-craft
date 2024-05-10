@@ -1,0 +1,298 @@
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: black;
+    font-family: 'Roboto Mono', monospace;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+    width: 100%;
+}
+
+button {
+    font-size: 18px;
+    outline: none;
+    border: none;
+    color: black;
+    background-color: transparent;
+    padding: 5px 20px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media screen and (max-width: 640px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    #play-menu {
+        padding: 10px 15px;
+        min-width: 280px;
+    }
+
+    #disconnect-modal>div {
+        padding: 10px;
+        min-width: 280px;
+    }
+
+    body {
+    background: #020916; /* 우주 배경의 기본색 */
+    overflow: hidden;
+    position: relative;
+}
+
+/* 별들 생성 */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 0;
+
+    /* 랜덤한 별의 효과 생성 */
+    background: 
+        radial-gradient(white, rgba(255, 255, 255, 0.2) 2px, transparent 30px),
+        radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255, 255, 255, 0.1) 2px, transparent 40px);
+    
+    background-repeat: repeat;
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+}
+
+/* 별똥별 생성 */
+body::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 3px;
+    height: 3px;
+    background: radial-gradient(circle, white 60%, transparent 70%);
+    box-shadow: 
+        3px 3px white, 
+        5px 5px white, 
+        -3px -3px white,
+        -5px -5px white,
+        3px -3px white,
+        -3px 3px white;
+    z-index: 1;
+}
+
+#leaderboard {
+    border: 3px solid #9f6ee7;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 3px rgba(159, 110, 231, 0.5);
+    color: #FFF;
+    padding: 20px;
+}
+
+#leaderboard th, #leaderboard td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #9f6ee7;
+}
+
+#leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+#leaderboard tr:last-child td {
+    border-bottom: none;
+}
+
+}
+
+/*------------------------------------*/
+
+#play-menu {
+    /* flex: 5; */
+    position: absolute;
+    top: 5%;
+    justify-content: center;
+    width: 700px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+@keyframes neonFlicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        text-shadow: 
+        0 0 5px rgba(123, 173, 230, 0.5), 
+        0 0 10px rgba(123, 173, 230, 0.5),
+        0 0 15px rgba(123, 173, 230, 0.5), 
+        0 0 20px rgba(123, 173, 230, 0.5), 
+        0 0 30px rgba(123, 173, 230, 0.5);
+    }
+    20%, 24%, 55% { 
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+#play-menu h1 {
+    font-family: 'Roboto Mono', monospace;
+    margin-top: 0;
+    color: rgba(123, 173, 230, 1);
+    font-size: 4rem;
+    text-shadow: 
+    0 0 5px rgba(123, 173, 230, 0.3), 
+    0 0 10px rgba(123, 173, 230, 0.3),
+    0 0 15px rgba(123, 173, 230, 0.3), 
+    0 0 20px rgba(123, 173, 230, 0.3), 
+    0 0 30px rgba(123, 173, 230, 0.3);
+    animation: neonFlicker 1.5s infinite alternate;
+}
+
+/*------------------------------------*/
+
+#rank-box {
+    position: absolute;
+    display: flex;
+    top: 20%;
+    height: 60%;
+    left: 30%;
+    width: 40%;
+    border-radius: 2px; /* 둥글게 변경 */
+    background-color: none; /* 약간의 투명한 검은색 배경으로 변경 */
+    justify-content: center;
+    align-items: center;
+    /* box-shadow: 0 0 2px rgba(123, 173, 230, 0.5); 투명한 그림자 추가 */
+  }
+  
+  #today-rank {
+      background-color: rgba(123, 173, 230, 0.2);
+      height: 100%;
+      /* background-color: rgba(0, 0, 0, 0.3); 약간의 투명한 검은색 배경으로 변경 */
+      width: 100%; 
+      overflow-y: auto;
+      backdrop-filter: blur(2px); /* 더 크게 흐리게 설정 */
+      border-radius: 2px; /* 둥글게 변경 */
+      font-size: 1.5em;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+  }
+  
+  table {
+      width: 100%;
+      border-radius: 2px;
+      border-collapse: collapse;
+      margin-top: 20px;
+  }
+  
+  th, td {
+      border-bottom: 1px solid rgba(123, 173, 230, 0.3); /* 수정: solid 추가 */
+      padding: 8px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.2); /* 약간의 투명한 검은색 배경으로 변경 */
+  }
+  
+  th {
+      background-color: rgba(123, 173, 230, 0.5);
+  }
+
+/*------------------------------------*/
+  
+#audio-box {
+    position: fixed;
+    width: 10%;
+    height: 10%;
+    bottom: 5%;
+    left: 0%;
+    z-index: 10;
+    background-color: transparent;
+    /* Change here */
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1px;
+    transition: 0.5s;
+}
+
+#audio-box.hidden-to-left {
+    left: -30%;
+}
+
+
+#muteUnmuteBtn {
+    color: #fff;
+    width: 80%;
+    transition: 0.5s;
+    background: rgba(123, 173, 230, 0.2);
+    border-radius: 1px;
+    margin-bottom: 10%;
+    transform: 0.5s;
+    justify-content: center;
+  }
+  
+#muteUnmuteBtn:hover {
+background: rgba(123, 173, 230, 0.4);;
+}
+
+#muteUnmuteIcon {
+    height: 50px;
+    width: 50px;
+}
+
+#volumeControl {
+    width: 80%;
+    bottom: 10%;
+}
+
+/*------------------------------------*/
+
+/* #start-button {
+    position: absolute;
+    top: 5%;
+    justify-content: center;
+    width: 700px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-family: 'Roboto Mono', monospace;
+    margin-top: 0;
+    color: rgba(123, 173, 230, 1);
+    font-size: 2rem;
+    text-shadow: 
+    0 0 5px rgba(123, 173, 230, 0.3), 
+    0 0 10px rgba(123, 173, 230, 0.3),
+    0 0 15px rgba(123, 173, 230, 0.3), 
+    0 0 20px rgba(123, 173, 230, 0.3), 
+    0 0 30px rgba(123, 173, 230, 0.3);
+    animation: neonFlicker 1.5s infinite alternate;
+
+} */

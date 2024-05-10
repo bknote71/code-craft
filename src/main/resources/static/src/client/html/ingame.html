@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Code Craft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/assets/webicon.png">
+  <meta property="description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:title" content="An example .io game">
+  <meta property="og:description"
+    content="A complete example multiplayer .io web game implemented from scratch. Built with Javascript and Node.js. Open source on Github.">
+  <meta property="og:image" content="/assets/icon1200.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@100&display=swap');
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58664433-3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi-particles/4.3.1/pixi-particles.min.js"></script>
+  <script src="src/client/networking.js"></script>
+  <script src="src/client/backgroundMusic.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-58664433-3');
+  </script>
+  <script src="src/client/ingame.js"></script>
+  <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+
+</head>
+
+<body>
+  <canvas id="game-canvas"></canvas>
+  
+  <button id="toggle-event" class="space-button">
+    <img src="assets/firework.png" alt="event">
+  </button>
+  <div id="event-sidebar" class="event-sidebar">
+    <div class="event-box">
+      <strong>
+        public void run() {
+        
+        }
+      </strong>
+      <br/>
+      <p>기본적인 상태를 의미합니다.</p>
+    </div>
+    
+    <div class="event-box">
+      <strong>
+        public void onHitByBullet(HitByBulletEvent hitByBulletEvent){
+        
+        }
+      </strong>
+      <br/>
+      <p>내가 총에 맞았을 때 발생하는 이벤트 입니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        public void onScannedRobot(ScannedRobotEvent event) {
+
+        }
+      </strong>
+      <br/>
+      <p>레이더가 스캐닝을 성공했을 때 발생하는 이벤트 입니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        public void onBulletHit(BulletHitEvent bulletHitEvent) {
+
+        }
+      </strong>
+      <br/>
+      <p>내가 쏜 총알이 상대방에게 맞았을때 발생하는 이벤트 입니다.</p>
+    </div>
+  </div>
+
+<button id="toggle-module" class="space-button">
+  <img src="assets/function.png" alt="function">
+</button>
+  <div id="module-sidebar" class="sidebar">
+
+    <h2>MODULE MANUAL</h2>
+    <div class="module-box">
+      <strong>
+        ahead(distance)
+      </strong>
+      <br/>
+      <p>distance 만큼 앞으로 이동합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>back(distance)</strong>
+        <br/>
+        <p>distance 만큼 뒤로 이동합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>fire(power)</strong>
+        <br/>
+        <p>power 만큼의 총알을 쏩니다.<br/>(power가 클수록 쿨타임이 깁니다.)</p>
+    </div>
+    <div class="module-box">
+        <strong>scan()</strong>
+        <br/>
+        <p>적을 스캔합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>turnLeft(degrees)</strong>
+        <br/>
+        <p>degree 만큼 몸통을 왼쪽으로 회전합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>turnRight(degrees)</strong>
+        <br/>
+        <p>degree 만큼 몸통을 오른쪽으로 회전합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>turnGunLeft(degrees)</strong>
+        <br/>
+        <p>degree 만큼 총구를 왼쪽으로 회전합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>turnGunRight(degrees)</strong>
+        <br/>
+        <p>degree 만큼 총구를 오른쪽으로 회전합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>robot_image(이미지이름)</strong>
+        <br/>
+        <p>자신의 로봇의 이미지를 선택할 수 있습니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>getX()</strong>
+        <br/>
+        <p>자신의 X 좌표를 가져옵니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>getY()</strong>
+        <br/>
+        <p>자신의 Y 좌표를 가져옵니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>getHeading(degrees)</strong>
+        <br/>
+        <p>몸통 방향을 degrees쪽으로 향하게 합니다.</p>
+    </div>
+    <div class="module-box">
+        <strong>getGunHeading(degrees)</strong>
+        <br/>
+        <p>총구 방향을 degrees쪽으로 향하게 합니다.</p>
+    </div>
+
+  </div>
+
+  <button id="toggle-help" class="space-button">
+    <img src="assets/help.png">
+  </button>
+  <div id="help-sidebar" class="help-sidebar">
+    <div class="event-box">
+      <strong>
+        체력
+      </strong>
+      <br/>
+      <p>기본 체력 : 5</p>
+      <br/>
+      <p>상대방을 죽일경우 : +3 체력 회복</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        점수
+      </strong>
+      <br/>
+      <p>상대방을 죽일경우 : +2 점수 획득</p>
+      <br/>
+      <p>죽으면 점수는 0으로 초기화 됩니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        지형
+      </strong>
+      <br/>
+      <p>좌-우 , 상-하 로 연결되어 있습니다.</p>
+      <br/>
+      <p>한쪽 끝에 도달하면 반대쪽으로 넘어가게 됩니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        fire() 조절
+      </strong>
+      <br/>
+      <p>변수로 1 ~ 3 을 넣을 수 있습니다.</p>
+      <br/>
+      <p>변수를 높게 할 수록 적게 쏠 수 있습니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        투사체 특성
+      </strong>
+      <br/>
+      <p>투사체는 캐릭터와 달리 지형을 넘어 갈 수 없습니다.</p>
+      <br/>
+      <p>본인의 투사체는 본인이 맞을 수 없다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        포탑
+      </strong>
+      <br/>
+      <p>포탑이 보는 방향부터 스캔을 시작 합니다.</p>
+      <br/>
+      <p>몸체와 함께 움직일때와 포탑만 움직일때의 스캔은 약간 다름니다.</p>
+    </div>
+    <div class="event-box">
+      <strong>
+        캐릭터
+      </strong>
+      <br/>
+      <p>본인은 초록색으로 색칠되어있습니다.(스캔도 같은 색입니다)</p>
+      <br/>
+      <p>적은 하얀색 , 적 스캔은 빨간색으로 색칠되어있습니다.</p>  
+    </div>
+  </div>
+
+  <button id="toggle-main-container" class="space-button">View Code</button>
+
+  <div id="main-container">
+
+    <!-- <div id="closebtn" class="closebtn">×</div> -->
+
+    <div id="deck">
+      <button id="deck-one" class="active" th:onclick="selectDeckIndex(0)">1</button>
+      <button id="deck-two" th:onclick="selectDeckIndex(1)">2</button>
+      <button id="deck-thress" th:onclick="selectDeckIndex(2)">3</button>
+      <select id="language-select">
+        <option value="java" selected>Java</option>
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="cpp">C++</option>
+      </select>
+    </div>
+
+    <div id="container">
+      <div id="container-body">
+        <div id="button-container">
+          <button id="plus-button" th:onclick="increaseFontSize()">+</button>
+          <button id="minus-button" th:onclick="decreaseFontSize()">-</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="terminal-box">
+      <div id="terminal"></div>
+      <button id="compile-button" th:onclick="run_code()">
+        Compile
+      </button> <!-- index 값을 넘겨줌 -->
+    </div>
+
+    <div id="compile-sidebar">
+      <div id="loading-button"></div>
+    </div>
+
+  </div>
+
+  <div id="coding-result"></div>
+
+<div id="audio-box">
+  <audio id="audioPlayer" autoplay loop>
+    <source src="assets/NLP_Lobby_Final_Loop.mp3" type="audio/mp3">
+  </audio>
+  <button id="muteUnmuteBtn">
+    <img id="muteUnmuteIcon" src="assets/volume.png"> <!-- Volume icon -->
+  </button>
+  <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.15">
+
+</div>
+
+<div id="toggle-leaderboard" class="space-button">Score</div>
+
+  <div id="leaderboard">
+
+    <table>
+      <tr>
+        <th>Username</th>
+        <th>Score</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+      
+  </div>
+
+  <input id="inputbar" type="text" placeholder="Enter chat..." autocomplete="off" maxlength="80">
+  <button id="exit-button" class="space-button" th:onclick = "exit_ingame()" > Exit </button>
+  <div id="disconnect-modal" class="hidden">
+    <div>
+      <h2> 서버 연결 에러! </h2>
+      <hr />
+      <button id="reconnect-button">reconnect</button>
+    </div>
+  </div>
+
+
+
+  
+</body>
+
+</html>
