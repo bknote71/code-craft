@@ -4,7 +4,7 @@ import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.Region;
-import com.bknote71.codecraft.robocode.loader.AwsS3ClassLoader;
+import com.bknote71.codecraft.engine.loader.AwsS3ClassLoader;
 import com.bknote71.codecraft.web.dto.CompileResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

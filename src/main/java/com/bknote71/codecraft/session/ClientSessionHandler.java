@@ -1,10 +1,9 @@
 package com.bknote71.codecraft.session;
 
-import com.bknote71.codecraft.robocode.core.RobotManager;
-import com.bknote71.codecraft.robocode.core.battle.Battle;
-import com.bknote71.codecraft.robocode.core.RobotPeer;
+import com.bknote71.codecraft.engine.core.RobotManager;
+import com.bknote71.codecraft.engine.core.battle.Battle;
+import com.bknote71.codecraft.engine.core.RobotPeer;
 import com.bknote71.codecraft.session.packet.ServerPacketManager;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;

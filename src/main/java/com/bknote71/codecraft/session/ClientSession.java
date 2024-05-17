@@ -1,12 +1,10 @@
 package com.bknote71.codecraft.session;
 
 import com.bknote71.codecraft.proto.Protocol;
-import com.bknote71.codecraft.robocode.core.RobotPeer;
+import com.bknote71.codecraft.engine.core.RobotPeer;
 import com.bknote71.codecraft.util.PacketTranslator;
-import lombok.Getter;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import java.io.IOException;
 import java.security.Principal;

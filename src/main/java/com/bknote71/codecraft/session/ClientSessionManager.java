@@ -1,9 +1,7 @@
 package com.bknote71.codecraft.session;
 
-import com.bknote71.codecraft.robocode.core.RobotPeer;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

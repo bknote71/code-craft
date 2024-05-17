@@ -1,8 +1,7 @@
 package com.bknote71.codecraft.proto;
 
-import com.bknote71.codecraft.robocode.core.RobotSpecification;
+import com.bknote71.codecraft.engine.core.RobotSpecification;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
 
 
 @JsonTypeName("senterbattle")

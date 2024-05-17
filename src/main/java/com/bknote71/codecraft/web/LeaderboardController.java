@@ -1,7 +1,7 @@
 package com.bknote71.codecraft.web;
 
-import com.bknote71.codecraft.robocode.leaderboard.LeaderBoardInfo;
-import com.bknote71.codecraft.robocode.leaderboard.LeaderBoardTemplate;
+import com.bknote71.codecraft.engine.leaderboard.LeaderBoardInfo;
+import com.bknote71.codecraft.engine.leaderboard.LeaderBoardTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
