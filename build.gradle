@@ -57,6 +57,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
 	implementation 'org.java-websocket:Java-WebSocket:1.5.3'
 
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+//	testImplementation 'org.springframework.security:spring-security-test:6.1.0'
 }
 
 tasks.named('test') {

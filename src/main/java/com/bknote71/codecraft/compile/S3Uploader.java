@@ -28,7 +28,7 @@ public class S3Uploader {
 
     S3Uploader() {
         this.threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-        this.threadPool.setMaximumPoolSize(10);
+        this.threadPool.setMaximumPoolSize(20);
 
         s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider("credentials.properties"));
         s3.setRegion(Region.AP_Seoul.toAWSRegion());
@@ -46,7 +46,6 @@ public class S3Uploader {
             s3.putObject(request);
 
             // completion
-            System.out.println("upload complete!!");
             states.remove(author + "/" + specIndex);
             removeFile(outputPath + key);
         });
