@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
 @Slf4j
-@Configuration
+//@Configuration
 public class ChatGptConfiguration {
 
     @Value("${gpt.token}")

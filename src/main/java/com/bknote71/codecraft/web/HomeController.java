@@ -1,7 +1,11 @@
 package com.bknote71.codecraft.web;
 
 import com.bknote71.codecraft.compile.JavaClassCompiler;
+import com.bknote71.codecraft.engine.core.RobotManager;
+import com.bknote71.codecraft.engine.core.RobotPeer;
+import com.bknote71.codecraft.engine.core.RobotSpecification;
 import com.bknote71.codecraft.entity.service.RobotSpecService;
+import com.bknote71.codecraft.session.packet.PacketHandler;
 import com.bknote71.codecraft.web.dto.CompileRequest;
 import com.bknote71.codecraft.web.dto.CompileResult;
 import com.bknote71.codecraft.web.dto.RobotSpecDto;
@@ -21,16 +25,16 @@ import java.util.List;
 @Controller
 public class HomeController {
     private final RobotSpecService robotSpecService;
-    private final CodeConvertService convertJavaCode;
     private final JavaClassCompiler javaClassCompiler;
+    //    private final CodeConvertService convertJavaCode;
 
     public HomeController(RobotSpecService robotSpecService,
-                          CodeConvertService convertJavaCode,
                           JavaClassCompiler javaClassCompiler
+//                          CodeConvertService convertJavaCode,
     ) {
         this.robotSpecService = robotSpecService;
-        this.convertJavaCode = convertJavaCode;
         this.javaClassCompiler = javaClassCompiler;
+//        this.convertJavaCode = convertJavaCode;
     }
 
     @GetMapping("/")
@@ -76,7 +80,7 @@ public class HomeController {
         if ((lang != null && !lang.isEmpty() && !lang.isBlank() && !lang.equals("undefined"))
                 && !lang.equals("java")) {
             assert !lang.equals("java");
-            javaCode = convertJavaCode.convertLangToJava(compileRequest.getLang(), compileRequest.getCode());
+//            javaCode = convertJavaCode.convertLangToJava(compileRequest.getLang(), compileRequest.getCode());
         }
 
         CompileResult result = javaClassCompiler.createRobot(username, javaCode, compileRequest.getSpecIndex());
@@ -100,9 +104,9 @@ public class HomeController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/convert-check")
-    @ResponseBody
-    public String convertCheck(String lang, String code) {
-        return convertJavaCode.convertLangToJava(lang, code);
-    }
+//    @PostMapping("/convert-check")
+//    @ResponseBody
+//    public String convertCheck(String lang, String code) {
+//        return convertJavaCode.convertLangToJava(lang, code);
+//    }
 }

@@ -3,6 +3,7 @@ package com.bknote71.codecraft.engine.loader;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Region;
+import com.amazonaws.services.s3.model.S3Object;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -12,7 +13,7 @@ import java.util.Properties;
 
 
 public class AwsS3ClassLoader extends ClassLoader {
-    public static final AwsS3ClassLoader Instance = new AwsS3ClassLoader("robot-class");
+    public static final AwsS3ClassLoader Instance = new AwsS3ClassLoader();
     private static final String S3_URL = "https://s3.amazonaws.com/";
 
     private static String packagePath;
@@ -45,8 +46,8 @@ public class AwsS3ClassLoader extends ClassLoader {
     private final AmazonS3Client s3;
     private final String bucketName;
 
-    public AwsS3ClassLoader(String bucketName) {
-        this.bucketName = bucketName;
+    public AwsS3ClassLoader() {
+        this.bucketName = "s3-testtest";
         s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider("credentials.properties"));
         s3.setRegion(Region.AP_Seoul.toAWSRegion());
     }
@@ -83,14 +84,12 @@ public class AwsS3ClassLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(String name) { // sa/FireBot.class
         try {
-            if (Arrays.stream(delegatedNames).anyMatch(name::startsWith))
-//                return Class.forName(name);
+            if (Arrays.stream(delegatedNames).anyMatch(name::startsWith)) {
                 return AwsS3ClassLoader.class.getClassLoader().loadClass(name);
+            }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println("find class: " + name);
 
         try {
             Class<?> result;
@@ -104,10 +103,14 @@ public class AwsS3ClassLoader extends ClassLoader {
             String classname = robotClass.split("\\.")[0];
             String fullPath = packagePath + "." + classname;
 
+            System.out.println(robotClass + " ," + classname + ", " + fullPath);
+
             if ((result = findLoadedClass(fullPath)) != null) {
                 System.out.println("이미 로드된 클래스입니다.");
                 return result;
             }
+
+            System.out.println("define class");
 
             return defineClass(fullPath, classBytes, 0, classBytes.length);
         } catch (Throwable e) {
@@ -119,7 +122,6 @@ public class AwsS3ClassLoader extends ClassLoader {
 
     private byte[] getClassBytes(String key) {
         try {
-            System.out.println("key: " + key);
             long contentLength = s3.getObjectMetadata(bucketName, key).getContentLength();
             if (contentLength == 0) {
                 System.out.println("컨텐츠를 s3로부터 불러오지 못함");
@@ -131,5 +133,15 @@ public class AwsS3ClassLoader extends ClassLoader {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private static byte[] readBytesFromStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, length);
+        }
+        return byteArrayOutputStream.toByteArray();
     }
 }

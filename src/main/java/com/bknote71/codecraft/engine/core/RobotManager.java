@@ -32,4 +32,8 @@ public class RobotManager {
             robots.remove(robotId);
         }
     }
+
+    public void createWithClass(int robotId) {
+
+    }
 }

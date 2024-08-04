@@ -28,7 +28,7 @@ public class RobotSpecService {
     private final PacketHandler packetHandler;
 
     public List<RobotSpecDto> getRobotInfo(String username) {
-        AwsS3ClassLoader classLoader = new AwsS3ClassLoader("robot-class");
+        AwsS3ClassLoader classLoader = new AwsS3ClassLoader();
         UserEntity user = userRepository.findByUsername(username);
         List<RobotSpecEntity> specs = null;
         if (user == null || (specs = user.getSpecifications()) == null || specs.isEmpty()) {
@@ -101,7 +101,7 @@ public class RobotSpecService {
     }
 
     @Transactional
-    private Long updateRobotSpec(String username, int specIndex, String robotName, String fullClassName, String code, String lang) {
+    public Long updateRobotSpec(String username, int specIndex, String robotName, String fullClassName, String code, String lang) {
         UserEntity user = userRepository.findByUsername(username);
 
         List<RobotSpecEntity> specifications = user.getSpecifications();
@@ -117,7 +117,6 @@ public class RobotSpecService {
         robotSpecEntity.setLang(lang);
         return robotSpecEntity.getId();
     }
-
     private static final String DEFAULTROBOT =
             "public class DefaultRobot%d extends Robot {\n" +
             "    public void run() {\n" +

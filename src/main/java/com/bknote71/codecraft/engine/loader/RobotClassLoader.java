@@ -2,6 +2,11 @@ package com.bknote71.codecraft.engine.loader;
 
 import com.bknote71.codecraft.engine.api.Robot;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 public class RobotClassLoader extends ClassLoader {
     private String author;
     private int specIndex;
@@ -14,7 +19,7 @@ public class RobotClassLoader extends ClassLoader {
         this.author = author;
         this.fullClassName = fullClassName;
         this.specIndex = specIndex;
-        classLoader = new AwsS3ClassLoader("robot-class");
+        classLoader = new AwsS3ClassLoader();
     }
 
     public synchronized Class<?> loadClass(String name) {

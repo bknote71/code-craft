@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-@Service
+//@Service
 public class CodeConvertService {
     private final OpenAiService openAiService;
 
-    @Value("${gpt.model}")
+//    @Value("${gpt.model}")
     private String gpt_model;
 
     public CodeConvertService(OpenAiService openAiService) {

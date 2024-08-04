@@ -1,15 +1,10 @@
 package com.bknote71.codecraft.compile;
 
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.Region;
 import com.bknote71.codecraft.engine.loader.AwsS3ClassLoader;
 import com.bknote71.codecraft.web.dto.CompileResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,12 +41,11 @@ public class JavaClassCompiler {
         }
     }
 
-    private AmazonS3Client s3;
-    private final String bucketName = "robot-class";
+    private S3Uploader uploadThreadPool;
 
     public JavaClassCompiler() {
-        s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider("credentials.properties"));
-        s3.setRegion(Region.AP_Seoul.toAWSRegion());
+        this.uploadThreadPool = S3Uploader.Instance;
+        this.uploadThreadPool.setOutputPath(outputPath);
     }
 
     public CompileResult createRobot(String author, String code, int specIndex) {
@@ -86,37 +80,30 @@ public class JavaClassCompiler {
             return new CompileResult(-1, "class name 이 없습니다.");
         }
 
-        String realContent =
-                "package " + packagePath + ";\n" +
-                importPath + "\n" +
-                "import com.bknote71.codecraft.robocode.event.*;" +
-                code + "\n";
+        String realContent = realContent(code);
 
         CompileResult result;
-        if ((result = compileRobot(author, javaName, realContent)).exitCode != 0) {
+        if ((result = compileRobot(author, specIndex, javaName, realContent)).exitCode != 0) {
             return result;
         }
 
         String key = author + "/" + specIndex + "/" + javaName + ".class";
-        String jpath = author + "/" + javaName + ".class";
-        File file = new File(outputPath + jpath);
-        uploadFileToS3(key, file);
-        removeDir(outputPath + author);
-
+        uploadThreadPool.uploadFile(key, author, specIndex);
         return result;
     }
 
-    private CompileResult compileRobot(String author, String javaName, String code) {
+    private CompileResult compileRobot(String author, int specIndex, String javaName, String code) {
         String javaFileName = javaName + ".java";
         String javaClassName = javaName + ".class";
-        try (FileWriter writer = new FileWriter(filePath + javaFileName)) {
+        try {
+            FileWriter writer = new FileWriter(filePath + javaFileName);
             writer.write(code);
             writer.flush();
             writer.close();
 
             String javaPath = "src/main/java";
             String libPath = "lib/*";
-            String outputDir = outputPath + author;
+            String outputDir = outputPath + author + "/" + specIndex;
             String sourceFile = filePath + javaFileName;
 
             String[] cmd = new String[]{
@@ -168,29 +155,11 @@ public class JavaClassCompiler {
         return new CompileResult(0, "success", javaName, javaClassName, code);
     }
 
-    private void uploadFileToS3(String key, File file) {
-        PutObjectRequest request = new PutObjectRequest(bucketName, key, file);
-        s3.putObject(request);
-    }
-
-    private void removeDir(String path) {
-        try {
-            String[] removeCmd = new String[]{
-                    "rm",
-                    "-rf",
-                    path
-            };
-
-            ProcessBuilder removeProcessBuilder = new ProcessBuilder(removeCmd);
-            removeProcessBuilder.inheritIO();
-            Process removeProcess = removeProcessBuilder.start();
-            if (removeProcess.waitFor(5, TimeUnit.SECONDS) != true) {
-                removeProcess.destroyForcibly();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    private String realContent(String code) {
+        return
+                "package " + packagePath + ";\n" +
+                importPath + "\n" +
+                "import com.bknote71.codecraft.engine.event.*;" +
+                code + "\n";
     }
 }

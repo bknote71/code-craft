@@ -1,5 +1,6 @@
 package com.bknote71.codecraft.engine.proxy;
 
+import com.bknote71.codecraft.compile.S3Uploader;
 import com.bknote71.codecraft.engine.api.Robot;
 import com.bknote71.codecraft.engine.loader.RobotClassLoader;
 import com.bknote71.codecraft.engine.event.EventManager;
@@ -19,13 +20,14 @@ public abstract class RobotProxy implements Runnable, IRobotPeer {
     private Robot robot;
     protected final RobotPeer peer;
 
+    private final RobotSpecification robotSpec;
     protected RobotClassLoader robotClassLoader;
-
     protected final RobotStatics statics;
 
     public RobotProxy(RobotSpecification robotSpecification, RobotPeer robotPeer, RobotStatics statics) {
         this.peer = robotPeer;
         this.statics = statics;
+        this.robotSpec = robotSpecification;
 
         robotClassLoader = createLoader(robotSpecification);
         robotThreadManager = new RobotThreadManager(this);
@@ -66,14 +68,22 @@ public abstract class RobotProxy implements Runnable, IRobotPeer {
     }
 
     private void loadClassBattle() {
-        robotClassLoader.loadRobotMainClass();
+//        robotClassLoader.loadRobotMainClass();
     }
 
     // 매번 죽고 태어날 때마다 로봇 로드
     private boolean loadRobot() {
         robot = null;
         try {
-             robot = robotClassLoader.createRobotInstance();
+            // if s3 uploading: (author + specIndex) << 있는지
+            String author = robotSpec.getUsername();
+            int specIndex = robotSpec.getSpecIndex();
+            if (S3Uploader.Instance.isUploading(author, specIndex)) {
+                robot = (Robot) S3Uploader.Instance.loadFromLocal(author, specIndex).newInstance();
+                System.out.println("load from local " + robot);
+            } else {
+                robot = robotClassLoader.createRobotInstance();
+            }
 
             if (robot == null) {
                 System.out.println("로봇 생성 실패");
