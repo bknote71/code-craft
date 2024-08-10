@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -49,37 +51,13 @@ public class JavaClassCompiler {
     }
 
     public CompileResult createRobot(String author, String code, int specIndex) {
-        String[] lines = code.split("\n");
+        final String javaName = validateCode(code);
 
-        int startIndex = 0;
-        for (int idx = 0; idx < lines.length; ++idx) {
-            if (lines[idx] != null && !(lines[idx].isEmpty() || lines[idx].isBlank())) {
-                startIndex = idx;
-                break;
-            }
+        if (javaName == null) {
+            return new CompileResult(-1, "code exception");
         }
 
-        if (startIndex == lines.length) {
-            return new CompileResult(-1, "empty code");
-        }
-
-        String javaName = "";
-        String startLine = lines[startIndex];
-        String[] startWords = startLine.split(" ");
-
-        if (startWords.length == 0) {
-            return new CompileResult(-1, "있을 수 없는일인데..");
-        }
-
-        if (startWords[0].equals("public"))
-            javaName = startWords[2];
-        else if (startWords[0].equals("class"))
-            javaName = startWords[1];
-
-        if (javaName == null || javaName.isEmpty() || javaName.isBlank()) {
-            return new CompileResult(-1, "class name 이 없습니다.");
-        }
-
+        code = preprocess(code);
         String realContent = realContent(code);
 
         CompileResult result;
@@ -90,6 +68,55 @@ public class JavaClassCompiler {
         String key = author + "/" + specIndex + "/" + javaName + ".class";
         uploadThreadPool.uploadFile(key, author, specIndex);
         return result;
+    }
+
+    private String validateCode(String code) {
+        String[] lines = code.split("\n");
+        int startIndex = 0;
+        for (int idx = 0; idx < lines.length; ++idx) {
+            if (lines[idx] != null && !(lines[idx].isEmpty() || lines[idx].isBlank())) {
+                startIndex = idx;
+                break;
+            }
+        }
+
+        if (startIndex == lines.length) {
+            return null;
+        }
+
+        String javaName = "";
+        String startLine = lines[startIndex];
+        String[] startWords = startLine.split(" ");
+
+        if (startWords.length == 0) {
+            return null;
+        }
+
+        if (startWords[0].equals("public"))
+            javaName = startWords[2];
+        else if (startWords[0].equals("class"))
+            javaName = startWords[1];
+
+        if (javaName == null || javaName.isEmpty() || javaName.isBlank()) {
+            return null;
+        }
+
+        return javaName;
+    }
+
+    private String preprocess(String code) {
+        String patternString = "while\\s*\\(([^)]+)\\)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(code);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            System.out.println(matcher);
+            String originalCondition = matcher.group(1); // 기존 조건 추출
+            String modifiedCondition = "(" + originalCondition + ")" + " && !Thread.currentThread().isInterrupted()";
+            matcher.appendReplacement(sb, "while (" + modifiedCondition + ")");
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     private CompileResult compileRobot(String author, int specIndex, String javaName, String code) {
@@ -158,8 +185,8 @@ public class JavaClassCompiler {
     private String realContent(String code) {
         return
                 "package " + packagePath + ";\n" +
-                importPath + "\n" +
-                "import com.bknote71.codecraft.engine.event.*;" +
-                code + "\n";
+                        importPath + "\n" +
+                        "import com.bknote71.codecraft.engine.event.*;" +
+                        code + "\n";
     }
 }
