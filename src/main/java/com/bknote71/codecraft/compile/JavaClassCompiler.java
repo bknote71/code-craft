@@ -116,7 +116,82 @@ public class JavaClassCompiler {
             matcher.appendReplacement(sb, "while (" + modifiedCondition + ")");
         }
         matcher.appendTail(sb);
-        return sb.toString();
+         code = sb.toString();
+
+        String whilePattern = "while\\s*\\(";
+        String forPattern = "(for\\s*\\([^)]*\\)\\s*\\{)([^}]*)\\}";
+
+        code = addSleepToForLoops(code, forPattern);
+        code = addSleepToWhileLoops(code, whilePattern);
+
+        return code;
+    }
+
+
+
+    private String addSleepToForLoops(String code, String pattern) {
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(code);
+        StringBuffer result = new StringBuffer();
+
+        while (matcher.find()) {
+            String loopStart = matcher.group(1); // 루프 시작 부분 (while 또는 for)
+            String loopBody = matcher.group(2);  // 루프 내부 코드
+            String modifiedLoop = loopStart + loopBody + "\n    Thread.sleep(1); \n}"; // Thread.sleep(1) 추가
+            matcher.appendReplacement(result, modifiedLoop);
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    private String addSleepToWhileLoops(String code, String pattern) {
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(code);
+        StringBuilder result = new StringBuilder();
+
+        int lastEnd = 0;
+        while (matcher.find()) {
+            int openParen = matcher.end();   // '(' 바로 다음 위치
+            int closeParen = findClosingParen(code, openParen); // 닫는 괄호 ')' 위치
+            int openBrace = code.indexOf('{', closeParen);      // 여는 중괄호 '{' 위치
+
+            if (closeParen != -1 && openBrace != -1) {
+                int loopEnd = findClosingBrace(code, openBrace + 1); // 닫는 중괄호 '}' 위치
+
+                if (loopEnd != -1) {
+                    // 이전까지의 코드 추가
+                    result.append(code, lastEnd, openBrace + 1); // 기존 코드에서 중괄호 까지 추가
+                    result.append("\n    Thread.sleep(1);"); // while 문 본문에 sleep 추가
+                    lastEnd = openBrace + 1; // 마지막 위치 업데이트
+                }
+            }
+        }
+        result.append(code.substring(lastEnd)); // 남은 코드 추가
+        return result.toString();
+    }
+
+    // 닫는 괄호 ')' 찾기
+    private int findClosingParen(String code, int start) {
+        int openParens = 1;
+        for (int i = start; i < code.length(); i++) {
+            char c = code.charAt(i);
+            if (c == '(') openParens++;
+            else if (c == ')') openParens--;
+            if (openParens == 0) return i;
+        }
+        return -1;
+    }
+
+    // 닫는 중괄호 '}' 찾기
+    private int findClosingBrace(String code, int start) {
+        int openBraces = 1;
+        for (int i = start; i < code.length(); i++) {
+            char c = code.charAt(i);
+            if (c == '{') openBraces++;
+            else if (c == '}') openBraces--;
+            if (openBraces == 0) return i + 1;
+        }
+        return -1;
     }
 
     private CompileResult compileRobot(String author, int specIndex, String javaName, String code) {
